@@ -3,89 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pokročilá kalkulačka dnů</title>
+    <title>Minimalistická kalkulačka dnů</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
     <style>
+        /* Moderní CSS proměnné pro snadnou změnu barev */
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --accent: #3b82f6;       /* Minimalistická modrá */
+            --accent-hover: #2563eb;
+            --error: #ef4444;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #f4f4f9;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
             padding: 20px;
-        }
-        .kontejner {
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            max-width: 500px;
-            margin: 20px auto;
-        }
-        h2 {
-            color: #333;
-            font-size: 22px;
-        }
-        input, button {
-            padding: 10px;
-            font-size: 16px;
-            margin: 10px 5px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            width: calc(100% - 24px); /* Přizpůsobení šířky kontejneru */
             box-sizing: border-box;
         }
+
+        .kontejner {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05); /* Velmi jemný stín */
+            width: 100%;
+            max-width: 460px;
+        }
+
+        h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 0 0 8px 0;
+        }
+
+        p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            margin-top: 0;
+        }
+
+        /* Uspořádání vstupních polí vedle sebe */
+        .input-group {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            box-sizing: border-box;
+            color: var(--text-main);
+        }
+
+        /* Efekt při kliknutí do políčka */
+        input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
         button {
-            background-color: #007bff;
+            width: 100%;
+            padding: 14px;
+            background-color: var(--accent);
             color: white;
             border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
             cursor: pointer;
-            font-weight: bold;
+            transition: background-color 0.2s, transform 0.1s;
+            font-family: 'Inter', sans-serif;
         }
+
         button:hover {
-            background-color: #0056b3;
+            background-color: var(--accent-hover);
         }
+
+        /* Jemné zmenšení tlačítka při kliknutí */
+        button:active {
+            transform: scale(0.98);
+        }
+
         .vysledek {
             margin-top: 20px;
-            font-size: 18px;
-            font-weight: bold;
-            color: #28a745;
+            font-size: 0.95rem;
+            font-weight: 500;
+            text-align: center;
+            padding: 12px;
+            border-radius: 8px;
+            background-color: var(--bg-color);
+            display: none; /* Skryto, dokud není výsledek */
         }
+
         hr {
             border: 0;
             height: 1px;
-            background: #eee;
-            margin: 30px 0;
+            background: var(--border-color);
+            margin: 32px 0;
         }
     </style>
 </head>
 <body>
 
     <div class="kontejner">
-        <h2>1. Kolik dnů dělí dvě data?</h2>
-        <p>Zadej datum A a datum B:</p>
-        <input type="date" id="datumA">
-        <input type="date" id="datumB">
+        <h2>Rozdíl mezi dvěma daty</h2>
+        <p>Zjistěte přesný počet dní.</p>
+        
+        <div class="input-group">
+            <input type="date" id="datumA">
+            <input type="date" id="datumB">
+        </div>
         <button onclick="spocitejRozdil()">Spočítat dny</button>
         <div id="vysledek1" class="vysledek"></div>
         
         <hr>
 
-        <h2>2. Kdy to bude X dnů?</h2>
-        <p>Zadej výchozí datum a počet dnů (např. 10000):</p>
-        <input type="date" id="vychoziDatum">
-        <input type="number" id="pocetDni" placeholder="Zadej počet dnů (např. 10000)">
+        <h2>Kdy to bude?</h2>
+        <p>Přičtěte počet dnů k vybranému datu.</p>
+        
+        <div class="input-group">
+            <input type="date" id="vychoziDatum">
+            <input type="number" id="pocetDni" placeholder="Počet dnů (např. 10000)">
+        </div>
         <button onclick="zjistiDatum()">Zjistit přesné datum</button>
         <div id="vysledek2" class="vysledek"></div>
     </div>
 
     <script>
-        // Funkce 1: Rozdíl mezi dvěma daty
+        function ukazVysledek(elementId, text, jeChyba = false) {
+            const el = document.getElementById(elementId);
+            el.style.display = 'block';
+            el.innerText = text;
+            el.style.color = jeChyba ? 'var(--error)' : 'var(--text-main)';
+            el.style.backgroundColor = jeChyba ? '#fef2f2' : 'var(--bg-color)';
+        }
+
         function spocitejRozdil() {
             const vstupA = document.getElementById('datumA').value;
             const vstupB = document.getElementById('datumB').value;
-            const vysledekDiv1 = document.getElementById('vysledek1');
 
             if (!vstupA || !vstupB) {
-                vysledekDiv1.style.color = "red";
-                vysledekDiv1.innerText = "Prosím, vyplň obě data.";
+                ukazVysledek('vysledek1', 'Prosím, vyplňte obě data.', true);
                 return;
             }
 
@@ -95,39 +173,29 @@
             datumA.setHours(0, 0, 0, 0);
             datumB.setHours(0, 0, 0, 0);
 
-            // Použijeme Math.abs pro absolutní hodnotu, aby nezáleželo, které datum je starší
             const rozdilMilisekundy = Math.abs(datumB - datumA);
             const rozdilDny = Math.floor(rozdilMilisekundy / (1000 * 60 * 60 * 24));
 
-            vysledekDiv1.style.color = "#28a745"; // Vrátíme zelenou barvu pro úspěch
-            vysledekDiv1.innerText = `Tato dvě data od sebe dělí přesně ${rozdilDny} dní.`;
+            ukazVysledek('vysledek1', `Tato data od sebe dělí přesně ${rozdilDny} dní.`);
         }
 
-        // Funkce 2: Přičtení dnů k datu
         function zjistiDatum() {
             const vstupDatum = document.getElementById('vychoziDatum').value;
             const pocetDni = parseInt(document.getElementById('pocetDni').value);
-            const vysledekDiv2 = document.getElementById('vysledek2');
 
             if (!vstupDatum || isNaN(pocetDni)) {
-                vysledekDiv2.style.color = "red";
-                vysledekDiv2.innerText = "Prosím, vyber datum a zadej platný počet dnů.";
+                ukazVysledek('vysledek2', 'Prosím, vyberte datum a zadejte počet dnů.', true);
                 return;
             }
 
             const ciloveDatum = new Date(vstupDatum);
-            
-            // JavaScriptová magie: Můžeme jednoduše vzít aktuální den v měsíci a přičíst k němu naše dny.
-            // Objekt Date se sám automaticky přetočí do správných měsíců a let (včetně přestupných).
             ciloveDatum.setDate(ciloveDatum.getDate() + pocetDni);
 
-            // Formátování data na hezký český formát (DD. MM. RRRR)
             const den = ciloveDatum.getDate();
-            const mesic = ciloveDatum.getMonth() + 1; // Měsíce se v JS počítají od 0, proto +1
+            const mesic = ciloveDatum.getMonth() + 1;
             const rok = ciloveDatum.getFullYear();
 
-            vysledekDiv2.style.color = "#28a745";
-            vysledekDiv2.innerText = `Za ${pocetDni} dnů od vybraného data bude: ${den}. ${mesic}. ${rok}.`;
+            ukazVysledek('vysledek2', `Za ${pocetDni} dnů bude: ${den}. ${mesic}. ${rok}`);
         }
     </script>
 
