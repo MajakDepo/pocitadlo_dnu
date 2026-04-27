@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kalkulačka dnů | Mobilní verze</title>
+    <title>Kalkulačka dnů | Perfektní centr</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     
@@ -24,56 +24,66 @@
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
+            
+            /* Perfektní vycentrování v obou směrech */
             display: flex;
             justify-content: center;
-            /* Na mobilu zarovnáme nahoru */
-            align-items: flex-start; 
-            min-height: 100vh;
-            /* Odstraníme okraje, aby se na mobilu neplýtvalo místem */
+            align-items: center; 
+            
+            /* 100dvh řeší problém s adresním řádkem na mobilu (aby nevznikal zbytečný scroll) */
+            min-height: 100dvh; 
             margin: 0;
-            padding: 0; 
+            /* Jemný padding, aby se karta nikdy nedotýkala okrajů displeje */
+            padding: 15px; 
             box-sizing: border-box;
         }
 
         .kontejner {
             background-color: var(--card-bg);
-            /* Zmenšený padding pro mobily */
-            padding: 30px 20px; 
-            /* Na mobilu bez zakulacení a bez stínu - vypadá to víc jako aplikace */
-            border-radius: 0; 
-            box-shadow: none;
+            padding: 32px 24px; 
+            border-radius: 24px; /* Krásně zaoblené rohy zpět i pro mobil */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06); /* Jemný prostorový stín */
             width: 100%;
-            max-width: 460px;
-            /* Roztáhneme kontejner na celou výšku displeje */
-            min-height: 100vh; 
+            max-width: 420px;
             box-sizing: border-box;
         }
 
         h2 {
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             font-weight: 600;
-            margin: 0 0 8px 0;
+            margin: 0 0 6px 0;
             letter-spacing: -0.02em;
+            text-align: center; /* Vycentrování nadpisů pro lepší balanc */
         }
 
         p {
             color: var(--text-muted);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             margin-bottom: 20px;
             margin-top: 0;
+            text-align: center; /* Vycentrování popisků */
         }
 
         .input-group {
             display: flex;
-            gap: 10px;
+            /* Na mobilu dáme políčka pod sebe, aby se nedeformovala */
+            flex-direction: column; 
+            gap: 12px;
             margin-bottom: 16px;
+        }
+
+        /* Pokud je displej dostatečně široký (počítač nebo mobil na šířku), dáme políčka vedle sebe */
+        @media (min-width: 380px) {
+            .input-group {
+                flex-direction: row;
+            }
         }
 
         input {
             width: 100%;
-            padding: 12px 14px;
+            padding: 14px;
             border: 1.5px solid var(--border-color);
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: 0.95rem;
             font-family: 'Inter', sans-serif;
             outline: none;
@@ -81,7 +91,6 @@
             box-sizing: border-box;
             color: var(--text-main);
             background-color: #FAFAFA;
-            /* Zabrání přiblížení (zoomu) na iPhonech při kliknutí do políčka */
             appearance: none; 
         }
 
@@ -97,7 +106,7 @@
             background-color: var(--accent);
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
@@ -123,7 +132,7 @@
             font-weight: 500;
             text-align: center;
             padding: 14px;
-            border-radius: 10px;
+            border-radius: 12px;
             background-color: var(--bg-color);
             display: none;
         }
@@ -133,20 +142,6 @@
             height: 1px;
             background: linear-gradient(to right, transparent, var(--border-color), transparent);
             margin: 24px 0;
-        }
-
-        /* --- MEDIA QUERIES PRO POČÍTAČE A TABLETY --- */
-        /* Pokud je displej širší než 500px, vrátíme původní "plovoucí" vzhled */
-        @media (min-width: 500px) {
-            body {
-                align-items: center; /* Zpět na střed obrazovky */
-                padding: 20px;
-            }
-            .kontejner {
-                border-radius: 20px; /* Zpět zakulacené rohy */
-                box-shadow: 0 12px 30px rgba(0, 0, 0, 0.04); /* Vrácení stínu */
-                min-height: auto; /* Zrušení roztáhnutí na celou obrazovku */
-            }
         }
     </style>
 </head>
