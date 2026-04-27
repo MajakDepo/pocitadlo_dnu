@@ -3,89 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalkulačka dnů života</title>
+    <title>Pokročilá kalkulačka dnů</title>
     <style>
-        /* Jednoduchý design, aby stránka vypadala hezky */
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             background-color: #f4f4f9;
-            padding-top: 50px;
+            padding: 20px;
         }
         .kontejner {
             background-color: white;
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            display: inline-block;
+            max-width: 500px;
+            margin: 20px auto;
+        }
+        h2 {
+            color: #333;
+            font-size: 22px;
         }
         input, button {
             padding: 10px;
             font-size: 16px;
-            margin: 10px 0;
+            margin: 10px 5px;
             border-radius: 5px;
             border: 1px solid #ccc;
+            width: calc(100% - 24px); /* Přizpůsobení šířky kontejneru */
+            box-sizing: border-box;
         }
         button {
-            background-color: #28a745;
+            background-color: #007bff;
             color: white;
             border: none;
             cursor: pointer;
+            font-weight: bold;
         }
         button:hover {
-            background-color: #218838;
+            background-color: #0056b3;
         }
-        #vysledek {
+        .vysledek {
             margin-top: 20px;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: bold;
-            color: #333;
+            color: #28a745;
+        }
+        hr {
+            border: 0;
+            height: 1px;
+            background: #eee;
+            margin: 30px 0;
         }
     </style>
 </head>
 <body>
 
     <div class="kontejner">
-        <h1>Kalkulačka dnů</h1>
-        <p>Vyber své datum narození:</p>
+        <h2>1. Kolik dnů dělí dvě data?</h2>
+        <p>Zadej datum A a datum B:</p>
+        <input type="date" id="datumA">
+        <input type="date" id="datumB">
+        <button onclick="spocitejRozdil()">Spočítat dny</button>
+        <div id="vysledek1" class="vysledek"></div>
         
-        <input type="date" id="datumNarozeni">
-        <br>
-        <button onclick="spocitejDny()">Spočítat dny</button>
-        
-        <div id="vysledek"></div>
+        <hr>
+
+        <h2>2. Kdy to bude X dnů?</h2>
+        <p>Zadej výchozí datum a počet dnů (např. 10000):</p>
+        <input type="date" id="vychoziDatum">
+        <input type="number" id="pocetDni" placeholder="Zadej počet dnů (např. 10000)">
+        <button onclick="zjistiDatum()">Zjistit přesné datum</button>
+        <div id="vysledek2" class="vysledek"></div>
     </div>
 
     <script>
-        // Samotný program (JavaScript), který počítá dny
-        function spocitejDny() {
-            const vstup = document.getElementById('datumNarozeni').value;
-            const vysledekDiv = document.getElementById('vysledek');
+        // Funkce 1: Rozdíl mezi dvěma daty
+        function spocitejRozdil() {
+            const vstupA = document.getElementById('datumA').value;
+            const vstupB = document.getElementById('datumB').value;
+            const vysledekDiv1 = document.getElementById('vysledek1');
 
-            if (!vstup) {
-                vysledekDiv.innerText = "Prosím, vyber datum z kalendáře.";
+            if (!vstupA || !vstupB) {
+                vysledekDiv1.style.color = "red";
+                vysledekDiv1.innerText = "Prosím, vyplň obě data.";
                 return;
             }
 
-            // Převedení vstupů na datumové objekty
-            const datumNarozeni = new Date(vstup);
-            const dnes = new Date();
+            const datumA = new Date(vstupA);
+            const datumB = new Date(vstupB);
             
-            // Ignorujeme přesný čas a bereme jen celé dny (půlnoc)
-            dnes.setHours(0, 0, 0, 0);
-            datumNarozeni.setHours(0, 0, 0, 0);
+            datumA.setHours(0, 0, 0, 0);
+            datumB.setHours(0, 0, 0, 0);
 
-            // Výpočet rozdílu v milisekundách
-            const rozdilMilisekundy = dnes - datumNarozeni;
-            
-            // Převod milisekund na dny (1000 ms * 60 s * 60 min * 24 h)
+            // Použijeme Math.abs pro absolutní hodnotu, aby nezáleželo, které datum je starší
+            const rozdilMilisekundy = Math.abs(datumB - datumA);
             const rozdilDny = Math.floor(rozdilMilisekundy / (1000 * 60 * 60 * 24));
 
-            if (rozdilDny < 0) {
-                vysledekDiv.innerText = "Zadal jsi datum v budoucnosti! Cestovat v čase zatím neumíme.";
-            } else {
-                vysledekDiv.innerText = `Od tvého narození uběhlo přesně ${rozdilDny} dní.`;
+            vysledekDiv1.style.color = "#28a745"; // Vrátíme zelenou barvu pro úspěch
+            vysledekDiv1.innerText = `Tato dvě data od sebe dělí přesně ${rozdilDny} dní.`;
+        }
+
+        // Funkce 2: Přičtení dnů k datu
+        function zjistiDatum() {
+            const vstupDatum = document.getElementById('vychoziDatum').value;
+            const pocetDni = parseInt(document.getElementById('pocetDni').value);
+            const vysledekDiv2 = document.getElementById('vysledek2');
+
+            if (!vstupDatum || isNaN(pocetDni)) {
+                vysledekDiv2.style.color = "red";
+                vysledekDiv2.innerText = "Prosím, vyber datum a zadej platný počet dnů.";
+                return;
             }
+
+            const ciloveDatum = new Date(vstupDatum);
+            
+            // JavaScriptová magie: Můžeme jednoduše vzít aktuální den v měsíci a přičíst k němu naše dny.
+            // Objekt Date se sám automaticky přetočí do správných měsíců a let (včetně přestupných).
+            ciloveDatum.setDate(ciloveDatum.getDate() + pocetDni);
+
+            // Formátování data na hezký český formát (DD. MM. RRRR)
+            const den = ciloveDatum.getDate();
+            const mesic = ciloveDatum.getMonth() + 1; // Měsíce se v JS počítají od 0, proto +1
+            const rok = ciloveDatum.getFullYear();
+
+            vysledekDiv2.style.color = "#28a745";
+            vysledekDiv2.innerText = `Za ${pocetDni} dnů od vybraného data bude: ${den}. ${mesic}. ${rok}.`;
         }
     </script>
 
