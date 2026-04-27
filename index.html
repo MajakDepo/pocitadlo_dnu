@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulačka dnů života</title>
+    <style>
+        /* Jednoduchý design, aby stránka vypadala hezky */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f9;
+            padding-top: 50px;
+        }
+        .kontejner {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            display: inline-block;
+        }
+        input, button {
+            padding: 10px;
+            font-size: 16px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        #vysledek {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="kontejner">
+        <h1>Kalkulačka dnů</h1>
+        <p>Vyber své datum narození:</p>
+        
+        <input type="date" id="datumNarozeni">
+        <br>
+        <button onclick="spocitejDny()">Spočítat dny</button>
+        
+        <div id="vysledek"></div>
+    </div>
+
+    <script>
+        // Samotný program (JavaScript), který počítá dny
+        function spocitejDny() {
+            const vstup = document.getElementById('datumNarozeni').value;
+            const vysledekDiv = document.getElementById('vysledek');
+
+            if (!vstup) {
+                vysledekDiv.innerText = "Prosím, vyber datum z kalendáře.";
+                return;
+            }
+
+            // Převedení vstupů na datumové objekty
+            const datumNarozeni = new Date(vstup);
+            const dnes = new Date();
+            
+            // Ignorujeme přesný čas a bereme jen celé dny (půlnoc)
+            dnes.setHours(0, 0, 0, 0);
+            datumNarozeni.setHours(0, 0, 0, 0);
+
+            // Výpočet rozdílu v milisekundách
+            const rozdilMilisekundy = dnes - datumNarozeni;
+            
+            // Převod milisekund na dny (1000 ms * 60 s * 60 min * 24 h)
+            const rozdilDny = Math.floor(rozdilMilisekundy / (1000 * 60 * 60 * 24));
+
+            if (rozdilDny < 0) {
+                vysledekDiv.innerText = "Zadal jsi datum v budoucnosti! Cestovat v čase zatím neumíme.";
+            } else {
+                vysledekDiv.innerText = `Od tvého narození uběhlo přesně ${rozdilDny} dní.`;
+            }
+        }
+    </script>
+
+</body>
+</html>
