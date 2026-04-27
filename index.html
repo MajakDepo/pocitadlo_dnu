@@ -2,23 +2,22 @@
 <html lang="cs">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalkulačka dnů | Teplý design</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kalkulačka dnů | Mobilní verze</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     
     <style>
-        /* Nová teplá a příjemná barevná paleta */
         :root {
-            --bg-color: #FAF9F6;      /* Slonová kost / teplá bílá na pozadí */
-            --card-bg: #ffffff;       /* Čistě bílá pro samotnou kartu kalkulačky */
-            --text-main: #2C363F;     /* Tmavá antracitová pro text (jemnější než černá) */
-            --text-muted: #8A95A5;    /* Jemná šedo-modrá pro popisky */
-            --border-color: #E2E8F0;  /* Světle šedá pro ohraničení */
-            --accent: #D27D60;        /* Příjemná terakotová pro tlačítka a efekty */
-            --accent-hover: #B8654A;  /* Tmavší terakotová při najetí myší */
-            --error: #E05263;         /* Tlumená červená pro chyby */
-            --success-text: #4A7C59;  /* Uklidňující šalvějově zelená pro výsledky */
+            --bg-color: #FAF9F6;
+            --card-bg: #ffffff;
+            --text-main: #2C363F;
+            --text-muted: #8A95A5;
+            --border-color: #E2E8F0;
+            --accent: #D27D60;
+            --accent-hover: #B8654A;
+            --error: #E05263;
+            --success-text: #4A7C59;
         }
 
         body {
@@ -27,47 +26,54 @@
             color: var(--text-main);
             display: flex;
             justify-content: center;
-            align-items: center;
+            /* Na mobilu zarovnáme nahoru */
+            align-items: flex-start; 
             min-height: 100vh;
+            /* Odstraníme okraje, aby se na mobilu neplýtvalo místem */
             margin: 0;
-            padding: 20px;
+            padding: 0; 
             box-sizing: border-box;
         }
 
         .kontejner {
             background-color: var(--card-bg);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.04); /* Ještě jemnější a širší stín */
+            /* Zmenšený padding pro mobily */
+            padding: 30px 20px; 
+            /* Na mobilu bez zakulacení a bez stínu - vypadá to víc jako aplikace */
+            border-radius: 0; 
+            box-shadow: none;
             width: 100%;
             max-width: 460px;
+            /* Roztáhneme kontejner na celou výšku displeje */
+            min-height: 100vh; 
+            box-sizing: border-box;
         }
 
         h2 {
             font-size: 1.25rem;
             font-weight: 600;
             margin: 0 0 8px 0;
-            letter-spacing: -0.02em; /* Moderní mírné sražení písmen */
+            letter-spacing: -0.02em;
         }
 
         p {
             color: var(--text-muted);
             font-size: 0.9rem;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
             margin-top: 0;
         }
 
         .input-group {
             display: flex;
-            gap: 12px;
+            gap: 10px;
             margin-bottom: 16px;
         }
 
         input {
             width: 100%;
-            padding: 12px 16px;
-            border: 1.5px solid var(--border-color); /* Mírně silnější okraj pro lepší vzhled */
-            border-radius: 10px; /* Větší zaoblení */
+            padding: 12px 14px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 10px;
             font-size: 0.95rem;
             font-family: 'Inter', sans-serif;
             outline: none;
@@ -75,6 +81,8 @@
             box-sizing: border-box;
             color: var(--text-main);
             background-color: #FAFAFA;
+            /* Zabrání přiblížení (zoomu) na iPhonech při kliknutí do políčka */
+            appearance: none; 
         }
 
         input:focus {
@@ -95,12 +103,12 @@
             cursor: pointer;
             transition: all 0.2s ease;
             font-family: 'Inter', sans-serif;
-            box-shadow: 0 4px 6px rgba(210, 125, 96, 0.2); /* Jemný stín v barvě tlačítka */
+            box-shadow: 0 4px 6px rgba(210, 125, 96, 0.2);
         }
 
         button:hover {
             background-color: var(--accent-hover);
-            transform: translateY(-1px); /* Tlačítko mírně "povyskočí" */
+            transform: translateY(-1px);
             box-shadow: 0 6px 10px rgba(210, 125, 96, 0.25);
         }
 
@@ -110,7 +118,7 @@
         }
 
         .vysledek {
-            margin-top: 20px;
+            margin-top: 16px;
             font-size: 0.95rem;
             font-weight: 500;
             text-align: center;
@@ -123,8 +131,22 @@
         hr {
             border: 0;
             height: 1px;
-            background: linear-gradient(to right, transparent, var(--border-color), transparent); /* Elegantnější oddělovač */
-            margin: 32px 0;
+            background: linear-gradient(to right, transparent, var(--border-color), transparent);
+            margin: 24px 0;
+        }
+
+        /* --- MEDIA QUERIES PRO POČÍTAČE A TABLETY --- */
+        /* Pokud je displej širší než 500px, vrátíme původní "plovoucí" vzhled */
+        @media (min-width: 500px) {
+            body {
+                align-items: center; /* Zpět na střed obrazovky */
+                padding: 20px;
+            }
+            .kontejner {
+                border-radius: 20px; /* Zpět zakulacené rohy */
+                box-shadow: 0 12px 30px rgba(0, 0, 0, 0.04); /* Vrácení stínu */
+                min-height: auto; /* Zrušení roztáhnutí na celou obrazovku */
+            }
         }
     </style>
 </head>
@@ -162,10 +184,10 @@
             
             if (jeChyba) {
                 el.style.color = 'var(--error)';
-                el.style.backgroundColor = '#FFF0F2'; // Velmi jemná červená pro pozadí chyby
+                el.style.backgroundColor = '#FFF0F2';
             } else {
                 el.style.color = 'var(--success-text)';
-                el.style.backgroundColor = '#F0F7F2'; // Velmi jemná zelená pro úspěšný výsledek
+                el.style.backgroundColor = '#F0F7F2';
             }
         }
 
